@@ -6,48 +6,34 @@ class GildedRose
   end
 
   def tick
-    if @name != "Aged Brie" and @name != "Backstage passes to a TAFKAL80ETC concert"
-      if @quality > 0
-        if @name != "Sulfuras, Hand of Ragnaros"
-          @quality = @quality - 1
-        end
-      end
-    else
-      if @quality < 50
-        @quality = @quality + 1
-        if @name == "Backstage passes to a TAFKAL80ETC concert"
-          if @days_remaining < 11
-            if @quality < 50
-              @quality = @quality + 1
-            end
-          end
-          if @days_remaining < 6
-            if @quality < 50
-              @quality = @quality + 1
-            end
-          end
-        end
-      end
+    if @name == 'normal'
+      normal
+    elsif @name == 'Aged Brie'
+      brie
+    elsif @name == 'Backstage passes to a TAFKAL80ETC concert'
+      backstage
     end
-    if @name != "Sulfuras, Hand of Ragnaros"
-      @days_remaining = @days_remaining - 1
+  end
+
+  def normal
+    @quality -= 1 if @quality > 0
+    @quality -= 1 if @days_remaining <= 0
+    @days_remaining -= 1
+  end
+
+  def brie
+    @quality += 1 if @quality < 50
+    @quality += 1 if @days_remaining <= 0
+    @days_remaining -= 1
+  end
+
+  def backstage
+    if @quality != 50
+      @quality += 3 if @days_remaining <= 5
+      @quality += 1 if @days_remaining > 10
+      @quality += 2 if @days_remaining <= 10 && @days_remaining > 5
     end
-    if @days_remaining < 0
-      if @name != "Aged Brie"
-        if @name != "Backstage passes to a TAFKAL80ETC concert"
-          if @quality > 0
-            if @name != "Sulfuras, Hand of Ragnaros"
-              @quality = @quality - 1
-            end
-          end
-        else
-          @quality = @quality - @quality
-        end
-      else
-        if @quality < 50
-          @quality = @quality + 1
-        end
-      end
-    end
+    @quality = 0 if @days_remaining <= 0
+    @days_remaining -= 1
   end
 end
